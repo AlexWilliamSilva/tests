@@ -1,4 +1,5 @@
 <?php
+
 use PHPUnit\Framework\TestCase;
 use App\MediaNota;
 
@@ -16,5 +17,4 @@ class MediaNotaTest extends TestCase {
         $resultadodivisao = $divisao->divisao(20, 2);
         $this->assertEquals(10, $resultadodivisao);
     }
-    
 }
