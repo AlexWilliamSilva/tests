@@ -12,13 +12,17 @@ namespace PHPUnit\Framework\Constraint;
 use function sprintf;
 use ReflectionClass;
 use ReflectionException;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
 final class IsInstanceOf extends Constraint
 {
-    private readonly string $className;
+    /**
+     * @var string
+     */
+    private $className;
 
     public function __construct(string $className)
     {
@@ -33,15 +37,17 @@ final class IsInstanceOf extends Constraint
         return sprintf(
             'is instance of %s "%s"',
             $this->getType(),
-            $this->className
+            $this->className,
         );
     }
 
     /**
      * Evaluates the constraint for parameter $other. Returns true if the
      * constraint is met, false otherwise.
+     *
+     * @param mixed $other value or object to evaluate
      */
-    protected function matches(mixed $other): bool
+    protected function matches($other): bool
     {
         return $other instanceof $this->className;
     }
@@ -51,14 +57,18 @@ final class IsInstanceOf extends Constraint
      *
      * The beginning of failure messages is "Failed asserting that" in most
      * cases. This method should return the second part of that sentence.
+     *
+     * @param mixed $other evaluated value or object
+     *
+     * @throws InvalidArgumentException
      */
-    protected function failureDescription(mixed $other): string
+    protected function failureDescription($other): string
     {
         return sprintf(
             '%s is an instance of %s "%s"',
             $this->exporter()->shortenedExport($other),
             $this->getType(),
-            $this->className
+            $this->className,
         );
     }
 
@@ -70,7 +80,7 @@ final class IsInstanceOf extends Constraint
             if ($reflection->isInterface()) {
                 return 'interface';
             }
-        } catch (ReflectionException) {
+        } catch (ReflectionException $e) {
         }
 
         return 'class';
