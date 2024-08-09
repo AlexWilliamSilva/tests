@@ -1,16 +1,18 @@
 <?php
-
 namespace App;
 
 class Media 
 {
-    public function soma($a, $b) 
+    public function somar($a, $b)
     {
         return $a + $b;
     }
 
-    public function divisao($c)
+    public function divide($a, $b)
     {
-        return $c;
+        if ($b == 0) {
+            throw new \DivisionByZeroError("Divisão por zero não é permitida");
+        }
+        return $a / $b;
     }
 }
